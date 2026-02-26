@@ -5,8 +5,7 @@ import os
 
 app = FastAPI()
 
-client = OpenAI(api_key=("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"))
-
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 class CommentRequest(BaseModel):
     comment: str
 
