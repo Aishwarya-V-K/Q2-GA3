@@ -5,7 +5,7 @@ import os
 
 app = FastAPI()
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = OpenAI(api_key=("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"))
 
 class CommentRequest(BaseModel):
     comment: str
@@ -21,36 +21,34 @@ async def analyze_comment(request: CommentRequest):
 
     try:
         response = client.responses.parse(
-    model="gpt-4.1-mini",
-    input=[
-        {"role": "system", "content": "Return valid JSON only."},
-        {"role": "user", "content": request.comment}
-    ],
-    text_format={
-        "type": "json_schema",
-        "json_schema": {
-            "name": "sentiment_schema",
-            "schema": {
-                "type": "object",
-                "properties": {
-                    "sentiment": {
-                        "type": "string",
-                        "enum": ["positive", "negative", "neutral"]
-                    },
-                    "rating": {
-                        "type": "integer",
-                        "minimum": 1,
-                        "maximum": 5
+            model="gpt-4.1-mini",
+            input=[
+                {"role": "system", "content": "You are a strict sentiment analysis engine. Return valid JSON only."},
+                {"role": "user", "content": request.comment}
+            ],
+            text_format={
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "sentiment_schema",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "sentiment": {
+                                "type": "string",
+                                "enum": ["positive", "negative", "neutral"]
+                            },
+                            "rating": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 5
+                            }
+                        },
+                        "required": ["sentiment", "rating"],
+                        "additionalProperties": False
                     }
-                },
-                "required": ["sentiment", "rating"],
-                "additionalProperties": False
+                }
             }
-        }
-    }
-)
-
-return response.output_parsed
+        )
 
         return response.output_parsed
 
