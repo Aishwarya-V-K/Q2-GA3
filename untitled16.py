@@ -94,7 +94,7 @@ async def analyze_comment(request: CommentRequest):
 # 
 # app = FastAPI()
 # 
-# client = OpenAI(api_key="YOUR_NEW_API_KEY")  # put new key here temporarily
+# client = OpenAI(api_key="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")  # put new key here temporarily
 # 
 # class CommentRequest(BaseModel):
 #     comment: str
